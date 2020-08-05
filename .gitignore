@@ -1,0 +1,8 @@
+# Project exclude paths
+/adminPage/target/
+/delivery/target/
+/gateway/target/
+/inventory/target/
+/mapage/target/
+/order/target/
+/product/target/
