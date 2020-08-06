@@ -52,7 +52,7 @@ public class PolicyHandler{
             inventoryRepository.save(inventory);
         }
     }
-//0805 lys수정 start
+/*
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverProductModified_Change(@Payload ProductModified productModified){
 
@@ -66,6 +66,27 @@ public class PolicyHandler{
             inventoryRepository.save(inventory);
         }
     }
-//0805 lys수정 end
+*/
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverProductModified_Change(@Payload ProductModified productModified){
+        Inventory inventory = new Inventory();
+        if(inventoryRepository.findByProductId(productModified.getProductId()).isPresent()) {
+
+            System.out.println("##### listener INVENTORY MODIFIED  : " + productModified.toJson());
+
+            inventory = inventoryRepository.findByProductId(productModified.getProductId()).get();
+            inventory.setInvQty(productModified.getInvQty());
+            inventoryRepository.save(inventory);
+        }
+
+        else {
+            System.out.println("##### listener INVENTORY INSERT ======================");
+
+            inventory.setProductId(productModified.getProductId());
+            inventory.setInvQty(productModified.getInvQty());
+            inventoryRepository.save(inventory);
+        }
+    }
 
 }
